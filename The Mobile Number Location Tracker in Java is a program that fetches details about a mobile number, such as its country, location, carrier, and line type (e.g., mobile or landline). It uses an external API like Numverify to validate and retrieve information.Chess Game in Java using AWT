@@ -1,0 +1,67 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class ChessGame extends Frame {
+    private static final int TILE_SIZE = 60; // Size of each chessboard tile
+    private static final int BOARD_SIZE = 8; // 8x8 chessboard
+    
+    private String[][] board; // Chessboard representation
+    private boolean whiteTurn = true; // White starts first
+    
+    public ChessGame() {
+        // Initialize the chessboard
+        board = new String[BOARD_SIZE][BOARD_SIZE];
+        initializeBoard();
+        
+        // Set up the AWT Frame
+        setTitle("Chess Game");
+        setSize(TILE_SIZE * BOARD_SIZE, TILE_SIZE * BOARD_SIZE);
+        setVisible(true);
+        
+        // Handle closing the window
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+    
+    // Method to initialize the chessboard with pieces
+    private void initializeBoard() {
+        // Place pawns
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            board[1][i] = "P"; // Black Pawn
+            board[6][i] = "p"; // White Pawn
+        }
+        // Place other pieces
+        String[] pieces = {"R", "N", "B", "Q", "K", "B", "N", "R"};
+        System.arraycopy(pieces, 0, board[0], 0, pieces.length); // Black pieces
+        System.arraycopy(pieces, 0, board[7], 0, pieces.length); // White pieces
+    }
+    
+    // Paint method to draw the chessboard and pieces
+    public void paint(Graphics g) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                // Alternate tile colors
+                if ((row + col) % 2 == 0) {
+                    g.setColor(Color.LIGHT_GRAY);
+                } else {
+                    g.setColor(Color.DARK_GRAY);
+                }
+                g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                
+                // Draw pieces if present
+                if (board[row][col] != null) {
+                    g.setColor(Color.BLACK);
+                    g.drawString(board[row][col], col * TILE_SIZE + TILE_SIZE / 2, row * TILE_SIZE + TILE_SIZE / 2);
+                }
+            }
+        }
+    }
+    
+    // Main method to launch the application
+    public static void main(String[] args) {
+        new ChessGame();
+    }
+}
